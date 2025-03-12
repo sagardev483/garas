@@ -1,0 +1,44 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Shop All</a></li>
+      <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-md-6">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+      {% else %}
+        <img src="{% static 'store/images/default_tea.jpg' %}" class="img-fluid" alt="{{ product.name }}">
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h1>{{ product.name }}</h1>
+      <p>
+        {% if product.is_sale and product.sale_price %}
+          <span class="text-muted"><del>${{ product.price }}</del></span>
+          <span class="text-danger"> ${{ product.sale_price }}</span>
+          <span class="badge bg-danger ms-2">Sale</span>
+        {% else %}
+          ${{ product.price }}
+        {% endif %}
+      </p>
+      <p>{{ product.description }}</p>
+      <p>
+        {% if product.stock > 0 %}
+          <span class="text-success">In Stock ({{ product.stock }})</span>
+        {% else %}
+          <span class="text-danger">Out of Stock</span>
+        {% endif %}
+      </p>
+      {% if product.stock > 0 %}
+        <a href="{% url 'add_to_cart' product.slug %}" class="btn btn-primary">Add to Cart</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

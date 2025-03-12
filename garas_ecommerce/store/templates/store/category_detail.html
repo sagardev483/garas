@@ -1,0 +1,81 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Shop All</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+    </ol>
+  </nav>
+  <h1>{{ category.name }}</h1>
+  <p class="text-muted">Seasonal savings on select items.</p>
+  <hr>
+</div>
+
+<div class="container">
+  <div class="row">
+    <!-- Sidebar Filters -->
+    <div class="col-md-3 mb-4">
+      <div class="border p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="mb-0">Filters</h5>
+          <a href="{{ category.get_absolute_url }}" class="text-muted">Reset All</a>
+        </div>
+        <hr>
+        <form method="GET">
+          <h6>Price Range</h6>
+          <div class="mb-2">
+            <label for="min_price" class="form-label">Min: </label>
+            <input type="number" id="min_price" name="min_price" class="form-control" value="{{ min_price|default:'' }}" placeholder="0">
+          </div>
+          <div class="mb-3">
+            <label for="max_price" class="form-label">Max: </label>
+            <input type="number" id="max_price" name="max_price" class="form-control" value="{{ max_price|default:'' }}" placeholder="999">
+          </div>
+          <h6>Stock</h6>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="in_stock" id="in_stock" value="1" {% if in_stock == '1' %}checked{% endif %}>
+            <label class="form-check-label" for="in_stock">In Stock Only</label>
+          </div>
+          <h6>Sale</h6>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="on_sale" id="on_sale" value="1" {% if on_sale == '1' %}checked{% endif %}>
+            <label class="form-check-label" for="on_sale">Show Sale Items Only</label>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        </form>
+      </div>
+    </div>
+    <!-- Product Grid -->
+    <div class="col-md-9">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        {% for product in products %}
+          <div class="col">
+            <div class="card product-card h-100">
+              {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+              {% else %}
+                <img src="{% static 'store/images/default_tea.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+              {% endif %}
+              <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">
+                  {% if product.is_sale and product.sale_price %}
+                    <span class="text-muted"><del>${{ product.price }}</del></span>
+                    <span class="text-danger"> ${{ product.sale_price }}</span>
+                    <span class="badge bg-danger ms-2">Sale</span>
+                  {% else %}
+                    ${{ product.price }}
+                  {% endif %}
+                </p>
+                <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-outline-primary">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

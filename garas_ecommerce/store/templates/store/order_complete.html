@@ -1,0 +1,15 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="container my-5">
+  <h1>Thank You!</h1>
+  <p>Your order #{{ order.id }} has been placed.</p>
+  <hr>
+  <h4>Order Summary</h4>
+  <ul>
+    {% for item in order.order_items.all %}
+      <li>{{ item.product.name }} (x{{ item.quantity }}) - ${{ item.price }}</li>
+    {% endfor %}
+  </ul>
+  <p><strong>Total Paid:</strong> ${{ order.total_amount|floatformat:2 }}</p>
+</div>
+{% endblock %}

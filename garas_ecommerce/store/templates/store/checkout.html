@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="container my-5">
+  <h1>Checkout</h1>
+  <hr>
+  {% if cart_items %}
+    <form method="POST">
+      {% csrf_token %}
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.get_subtotal|floatformat:2 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="text-end">
+        <h4>Total: ${{ total|floatformat:2 }}</h4>
+      </div>
+      <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+  {% else %}
+    <p>No items in cart to checkout.</p>
+  {% endif %}
+</div>
+{% endblock %}

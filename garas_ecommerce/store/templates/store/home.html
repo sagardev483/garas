@@ -1,0 +1,112 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Hero Section -->
+<div class="hero-section" style="background-image: url('{% static 'store/images/b.webp' %}');">
+
+  <div class="hero-content">
+    <h1 class="display-4">Experience Garas Green Tea</h1>
+    <p class="lead">Sourced from the pristine high-altitude tea estates of Nepal...</p>
+    <a href="#" class="btn btn-primary btn-lg">Shop Now</a>
+  </div>
+</div>
+
+<!-- Featured Categories -->
+<div class="container my-5">
+  <div class="row g-4">
+    {% for cat in featured_categories %}
+      <div class="col-md-6">
+        <div class="card featured-card">
+          {% if cat.image %}
+            <img src="{{ cat.image.url }}" class="card-img" alt="{{ cat.name }}">
+          {% else %}
+            <img src="{% static 'store/images/c.webp' %}" class="card-img" alt="{{ cat.name }}">
+          {% endif %}
+          <div class="card-overlay">
+            <h3 class="card-title">{{ cat.name }}</h3>
+            <a href="{{ cat.get_absolute_url }}" class="btn">Shop Now</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Latest Products -->
+<div class="container my-5">
+  <h2 class="mb-4">Latest Products</h2>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+    {% for product in latest_products %}
+      <div class="col">
+        <div class="card product-card h-100">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          {% else %}
+            <img src="{% static 'store/images/c.webp' %}" class="card-img-top" alt="{{ product.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">
+              ${{ product.get_display_price }}
+              {% if product.is_sale %}
+                <span class="badge bg-danger ms-2">Sale</span>
+              {% endif %}
+            </p>
+            <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-primary">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Journey & Values Section -->
+<div class="container my-5">
+  <h2>Our Journey and Values</h2>
+  <p>Garas was founded in 2023, driven by a passion for high-quality tea. We adhere to strict organic practices and support local farmers to bring you the finest teas.</p>
+</div>
+
+<!-- Footer-like Explore Section -->
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-3">
+      <h5>Explore</h5>
+      <ul class="list-unstyled">
+        <li><a href="#">Premium Blends</a></li>
+        <li><a href="#">Organic Selections</a></li>
+        <li><a href="#">Sampler Sets</a></li>
+      </ul>
+    </div>
+    <div class="col-md-3">
+      <h5>Tea Varieties</h5>
+      <ul class="list-unstyled">
+        <li><a href="#">Green Tea</a></li>
+        <li><a href="#">Black Tea</a></li>
+        <li><a href="#">Silver Tea</a></li>
+        <li><a href="#">Golden Tea</a></li>
+      </ul>
+    </div>
+    <div class="col-md-3">
+      <h5>Accessories</h5>
+      <ul class="list-unstyled">
+        <li><a href="#">Loose Leaf Tools</a></li>
+        <li><a href="#">Teaware</a></li>
+        <li><a href="#">Dried Tea Leaves</a></li>
+      </ul>
+    </div>
+    <div class="col-md-3 subscription-form">
+      <h5>Stay Updated</h5>
+      <p>Enter your email for the latest news and exclusive offers:</p>
+      <form method="POST" action="#">
+        {% csrf_token %}
+        <div class="mb-3">
+          <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+        <button type="submit" class="btn btn-dark">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

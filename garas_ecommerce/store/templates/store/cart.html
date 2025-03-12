@@ -1,0 +1,39 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="container my-5">
+  <h1>Your Cart</h1>
+  <hr>
+  {% if cart_items %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+        <tr>
+          <td>{{ item.product.name }}</td>
+          <td>${{ item.product.get_display_price }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>${{ item.get_subtotal|floatformat:2 }}</td>
+          <td>
+            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-danger">Remove</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="text-end">
+      <h4>Total: ${{ total|floatformat:2 }}</h4>
+      <a href="{% url 'checkout' %}" class="btn btn-success">Proceed to Checkout</a>
+    </div>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+</div>
+{% endblock %}
